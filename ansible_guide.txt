@@ -1,0 +1,26 @@
+https://docs.ansible.com/ansible/latest/modules/apt_module.html
+
+vi /etc/ansible/hosts
+#Azure
+[Azure_hosts]
+13.91.50.37    ansible_ssh_user=ubuntu1 #ubuntu1
+13.91.109.60   ansible_ssh_user=ubuntu1 #ubuntu2
+[Azure_1]
+13.91.50.37  ansible_ssh_user=ubuntu1   #ubuntu1
+[Azure_2]
+13.91.109.60 ansible_ssh_user=ubuntu1   #ubuntu2
+
+COMMANDS_GUIDE
+ansible all -a "hostname" --private-key id_rsa
+ansible Azure_1 -a "hostname" --private-key id_rsa
+ansible Azure_2 -a "df -h" --private-key id_rsa
+ansible Azure_hosts -a "df -h" --private-key id_rsa
+ansible Azure_hosts -a "uname -a" --private-key id_rsa
+ansible all -s -m apt -a "name=ntp state=installed" --private-key id_rsa (con permisos de root, instala ntp)
+ansible all --private-key id_rsa -s -m group -a "name=admin state=present" (crea grupo)
+ansible all --private-key id_rsa -s -m user -a "name=soporte createhome=yes group=sudo"
+ansible all --private-key id_rsa -a "ls -l /home/" -u soporte
+ansible all --private-key id_rsa -m copy -a "src=test dest=/home/ubuntu1/"
+ansible all --private-key id_rsa  -a "cat /home/ubuntu1/test"
+ansible all --private-key id_rsa -m fetch -a "dest=/home/mgonzalez/Personal/Azure/ src=/home/ubuntu1/test" (crea un directorio por host con el fichero descargado)
+ansible all --private-key id_rsa -m file -a "path=/home/ubuntu1/Azure mode=644 state=directory" (crea un directorio)
