@@ -1,0 +1,22 @@
+# Partimos de una base oficial de bind
+FROM registry.access.redhat.com/rhel7/rhel
+
+# El directorio de trabajo es desde donde se ejecuta el contenedor al iniciarse
+
+# Copiamos todos los archivos del build context al directorio /etc del contenedor
+COPY . /etc/
+
+# Ejecutamos pip para instalar las dependencias en el contenedor
+RUN yum install bind
+
+# Indicamos que este contenedor se comunica por el puerto 53/tcp
+EXPOSE 53
+
+# Declaramos una variable de entorno
+
+
+# Ejecuta nuestra aplicación cuando se inicia el contenedor
+CMD ["named", "-c", "/etc/named/named.conf", "-g", "-u", "named"]
+
+
+#docker build -t dns_1:v1 .
